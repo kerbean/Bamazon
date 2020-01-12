@@ -80,7 +80,7 @@ function customerPrompt(res) {
             type: "input",
             message: "Input ID number of the desired item to purchase: ",
             validate: function (value) {
-                if (isNaN(value) === false) {
+                if ((isNaN(value) === false) && value !== "") {
                     return true;
                 }
                 return false;

@@ -72,7 +72,7 @@ function viewAllThings() {
             }
             console.log("\n-----------------------------------\n");
 
-            vamanosManager(res);
+            vamanosManager();
         });
 }
 
@@ -96,7 +96,7 @@ function viewLowNo() {
             }
             console.log("\n-----------------------------------\n");
 
-            vamanosManager(res);
+            vamanosManager();
         });
 }
 
@@ -132,7 +132,7 @@ function managerPrompt(res) {
             type: "input",
             message: "Input ID number of the desired item you want to add stock to: ",
             validate: function (value) {
-                if (isNaN(value) === false) {
+                if ((isNaN(value) === false) && value !== "") {
                     return true;
                 }
                 return false;
@@ -175,6 +175,7 @@ function managerPromptQuantity(item) {
             errorNaN();
             customerPromptQuantity(item);
         }
+        vamanosManager();
     });
 }
 
