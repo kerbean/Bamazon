@@ -47,6 +47,8 @@ function vamanosManager() {
             viewLowNo();
         } else if (answer.choice == "Add to Inventory") {
             addStock();
+        } else if (answer.choice == "Add New Product") {
+            newProduct();
         }
         else {
             textFormatter("Bye, Lazy Manager! I hope you help your colleagues today.");
@@ -175,7 +177,7 @@ function managerPromptQuantity(item) {
             errorNaN();
             customerPromptQuantity(item);
         }
-        vamanosManager();
+        //vamanosManager();
     });
 }
 
@@ -186,7 +188,7 @@ function updateItem(id, name, price, stock, quantity) {
         "UPDATE products SET ? WHERE ?",
         [
             {
-                stock_quantity: stock + quantity
+                stock_quantity: parseInt(stock) + parseInt(quantity)
             },
             {
                 item_id: id
@@ -200,6 +202,51 @@ function updateItem(id, name, price, stock, quantity) {
         }
     );
 
+}
+
+function newProduct() {
+    //console.log("START - newProduct()");
+
+    inq.prompt([
+        {
+            name: "name",
+            type: "input",
+            message: "What is the name of the item to be added?: "
+        },
+        {
+            name: "department",
+            type: "input",
+            message: "Which department should this item fall in?: "
+        },
+        {
+            name: "price",
+            type: "input",
+            message: "What would be the price of this item?: ",
+            validate: function (value) {
+                if ((isNaN(value) === false) && value !== "") {
+                    return true;
+                }
+                return false;
+            }
+        }
+    ])
+        .then(function (answer) {
+            connection.query(
+                "INSERT INTO products SET ?",
+                {
+                    product_name: answer.name,
+                    department_name: answer.department,
+                    price: answer.price || 0,
+                    stock_quantity: 0
+                },
+                function (err) {
+                    if (err) throw err;
+                    textFormatter("Item " + answer.name + "\nhas been added into "
+                        + answer.department + " department\nwith a price of " + answer.price + " aud");
+                    vamanosManager();
+                }
+            );
+        });
 }
 
 
